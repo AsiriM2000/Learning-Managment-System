@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Document Title
+        ============================================= -->
+    <title>LMS-Register</title>
+
+    <!-- Links
+       ============================================= -->
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/css/index.css" rel="stylesheet">
+    <link href="../assets/img/book.png" rel="icon" type="image/png">
+
+    <!-- Meta tags
+       ============================================= -->
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+</head>
+<body>
+
+<!----------------------- Main Container -------------------------->
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+
+    <!----------------------- SignUp Container -------------------------->
+
+    <div class="row border rounded-5 p-3 bg-white shadow box-area">
+
+        <!--------------------------- Left Box ----------------------------->
+
+        <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
+             style="background: #103cbe;">
+            <div class="featured-image mb-3">
+                <img class="img-fluid" src="../assets/img/lms.jpg" style="width: 450px;">
+            </div>
+            <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Welcome
+                To LMS</p>
+            <small class="text-white text-wrap text-center"
+                   style="width: 17rem;font-family: 'Courier New', Courier, monospace;">Please SignUp And Enroll
+                Courses</small>
+        </div>
+
+        <!-------------------- ------ Right Box ---------------------------->
+
+        <div class="col-md-6 right-box">
+            <div class="row align-items-center">
+                <div class="header-text mb-4">
+                    <h2>Hello,User</h2>
+                    <p>Happy to have you back.</p>
+                </div>
+                <div class="input-group mb-3">
+                    <input class="form-control form-control-lg bg-light fs-6" id="sName" name="name"
+                           placeholder="Full Name" type="text">
+                </div>
+
+                <div class="input-group mb-3">
+                    <input aria-describedby="inputGroupFileAddon01" class="custom-file-input" id="myFile" name="myFile"
+                           type="file">
+                </div>
+
+                <div class="input-group mb-3">
+                    <input class="form-control form-control-lg bg-light fs-6" id="sEmail" name="email"
+                           placeholder="Email address" type="text">
+                </div>
+
+                <div class="input-group mb-1">
+                    <input class="form-control form-control-lg bg-light fs-6" id="sPassword" name="password"
+                           placeholder="Password" type="password">
+                </div>
+
+                <span class="control-error" id="lblPassword"></span>
+                <p align="justify">please enter a capital(uppercase) letter, a lowercase letter, symbols and number</p>
+
+                <div class="input-group mb-3">
+                    <button class="btn btn-lg btn-primary w-100 fs-6" id="signUp" type="button">SignUp</button>
+                </div>
+                <div class="input-group mb-3">
+                    <button class="btn btn-lg btn-light w-100 fs-6"><img class="me-2"
+                                                                         src="../assets/img/google.png" style="width:20px"><small>SignUp
+                        In with Google</small></button>
+                </div>
+<!--                <div class="row">-->
+<!--                    <small><a href="../index.html" target="_self">Back</a></small>-->
+<!--                </div>-->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="../assets/js/bootstrap.min.js"></script>
+<script src="../assets/js/jquery-3.6.1.min.js"></script>
+<script>
+    let baseUrl = "http://localhost:8081/lms/api/v1/";
+
+    const NameRegEx =  /^[A-z ]{5,20}$/;
+    const EmailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const PasswordRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+
+    $("#signUp").click(function () {
+        let name = $("#sName").val();
+        let email = $("#sEmail").val();
+        let password = $("#sPassword").val();
+
+        if (password.match(PasswordRegEx) && email.match(EmailRegEx) && name.match(NameRegEx)){
+            let student = {
+                name: name,
+                email: email,
+                password: password
+            }
+
+            $.ajax({
+                url: baseUrl + "student",
+                method: "post",
+                contentType: "application/json",
+                dataType: "json",
+                data:JSON.stringify(student),
+                success: function (res){
+                    uploadRegisterImages(email);
+                    alert(res.message)
+                    location.href='../pages/login.html';
+                },
+                error: function (error){
+                    alert(JSON.parse(error.responseText).message);
+                }
+            })
+        }else {
+            alert("Name OR Email OR Password Pattern Incorrect!")
+            clear();
+        }
+
+        // var rData = new FormData();
+        //
+        //
+        // let imageViewFile = $("#myFile")[0].files[0];
+        // let imageFileName = $("#myFile")[0].files[0].name;
+        //
+        // let name = $("#sName").val();
+        // let email = $("#sEmail").val();
+        // let password = $("#sPassword").val();
+        //
+        // let image = imageFileName;
+        //
+        // var register ={
+        //     name: name,
+        //     email: email,
+        //     password: password,
+        //     image: "uploads/"+image
+        // }
+        //
+        // rData.append("vImageFile",imageViewFile)
+        // rData.append("register", new Blob([JSON.stringify(register)], {type: "application/json"}))
+        //
+        // $.ajax({
+        //     url: baseUrl+"student",
+        //     method: "POST",
+        //     async:true,
+        //     contentType:false,
+        //     processData: false,
+        //     data:rData,
+        //     success: function (resp){
+        //         uploadRegisterImages(email);
+        //         alert(resp.message)
+        //     },
+        //     error: function (error){
+        //         alert(JSON.parse(error.responseText).message);
+        //     }
+        // })
+
+
+    });
+
+    function uploadRegisterImages(email) {
+
+        let imageViewFile = $("#myFile")[0].files[0];
+
+        let imageFileName = email+"-image-"+$("#myFile")[0].files[0].name;
+
+        var data = new FormData();
+        data.append("image",imageViewFile,imageFileName);
+
+        $.ajax({
+            url: baseUrl + "student/uploadImg/" + email,
+            method: "POST",
+            async: true,
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (resp) {
+                console.log("Uploaded");
+                clear();
+                alert(resp.message)
+            },
+            error: function (error) {
+                alert(JSON.parse(error.responseText).message);
+            }
+        });
+
+        // let proFile = $("#myFile")[0].files[0];
+        //
+        // let proFileName = email + "-image-" + $("#myFile")[0].files[0].name;
+        //
+        // var data = new FormData();
+        //
+        // data.append("image", proFile, proFileName);
+        //
+        // $.ajax({
+        //     url: baseUrl + "student/uploadImg/" + email,
+        //     method: "put",
+        //     async: true,
+        //     contentType: false,
+        //     processData: false,
+        //     data: data,
+        //     success: function (resp) {
+        //         console.log("Uploaded");
+        //         clear();
+        //         alert(resp.message)
+        //     },
+        //     error: function (error) {
+        //         alert(JSON.parse(error.responseText).message);
+        //     }
+        // });
+    }
+
+
+    function clear() {
+        $("#sName").val("");
+        $("#sEmail").val("");
+        $("#sPassword").val("");
+    }
+
+</script>
+</body>
+</html>
