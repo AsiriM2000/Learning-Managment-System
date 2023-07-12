@@ -10,7 +10,7 @@
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <!----css3---->
     <link href="../assets/css/home.css" rel="stylesheet">
-    <link href="../assets/img/book.png" rel="icon" type="image/png">
+    <link href="../assets/img/bachelors-degree.png" rel="icon" type="image/png">
 
     <!--google fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -40,7 +40,7 @@
 <div class="wrapper">
     <div id="sidebar">
         <div class="sidebar-header">
-            <h3><img class="img-fluid" src="../assets/img/book.png"/><span>LMS</span></h3>
+            <h3><img class="img-fluid" src="../assets/img/graduation-hat.png"/><span>LMS</span></h3>
         </div>
         <ul class="list-unstyled component m-0">
             <li class="active" id="dashboard">
@@ -55,7 +55,7 @@
         </ul>
     </div>
     <div id="content">
-        <div class="top-navbar">
+        <div class="top-navbar bg-warning bg-opacity-80">
             <div class="xd-topbar">
                 <div class="row">
                     <div class="col-md-2 col-lg-12 order-3 order-md-2">
@@ -164,20 +164,23 @@
                             <div class="col-lg-6">
                                 <form>
                                     <div class="form-group">
-                                        <label for="name">Full Name</label>
-                                        <input type="name" class="form-control" id="name">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="email">Email address</label>
                                         <input type="email" class="form-control" id="email">
+                                        <span class="control-error" id="lblemail"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="name">Full Name</label>
+                                        <input type="name" class="form-control" id="name">
+                                        <span class="control-error" id="lblname"></span>
                                     </div>
                                     <div class="form-group">
                                         <label for="password">Password</label>
                                         <input type="password" class="form-control" id="password">
+                                        <span class="control-error" id="lblpassword"></span>
                                     </div>
                                     <div class="form-group" style="margin-top: 10px">
-                                        <button type="button" class="btn btn-warning">Update Info</button>
-                                        <button type="button" class="btn btn-danger">Delete Profile</button>
+                                        <button type="button" class="btn btn-warning" id="updateInfo">Update Info</button>
+                                        <button type="button" class="btn btn-danger" id="deleteInfo">Delete Profile</button>
                                     </div>
 
                                 </form>
@@ -228,13 +231,54 @@
                     $("#password").val(password);
                 },
                 error: function (error){
-
+                    console.log(JSON.parse(error.responseText).method);
                 }
             })
         }
     }
 
+    $("#updateInfo").click(function (){
+        let name = $("#name").val();
+        let email = $("#email").val();
+        let password = $("#password").val();
 
+        let student = {
+            name:name,
+            email:email,
+            password:password
+        }
+
+        $.ajax({
+            url: baseUrl+"student",
+            method: "put",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(student),
+            success: function (res){
+                loadAccDetail();
+                alert(res.message);
+            },
+            error: function (error){
+                alert(JSON.parse(error.responseText).message);
+            }
+        })
+    });
+
+    $("#deleteInfo").click(function (){
+        let email = $("#email").val();
+        $.ajax({
+            url: baseUrl+"student?email="+email,
+            method: "delete",
+            dataType: "json",
+            success: function (res){
+                alert(res.message);
+                location.href='../index.html'
+            },
+            error: function (error){
+                alert(JSON.parse(error.responseText).message);
+            }
+        })
+    });
 </script>
 
 </body>

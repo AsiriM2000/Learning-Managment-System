@@ -35,6 +35,22 @@ public class RegisterServiceImpl implements RegisterService {
     }
 
     @Override
+    public void updateInfo(RegisterDTO registerDTO) {
+        if (!repo.existsById(registerDTO.getEmail())){
+            throw new RuntimeException("Register "+registerDTO.getEmail()+" Not Available To Update...!");
+        }
+        repo.save(modelMapper.map(registerDTO,Register.class));
+    }
+
+    @Override
+    public void deleteInfo(String email) {
+        if (!repo.existsById(email)){
+            throw new RuntimeException(email+" Not Available to Delete...!");
+        }
+        repo.deleteById(email);
+    }
+
+    @Override
     public void uploadRegisterImages(String image, String email) {
         repo.updateRegisterFilePaths(image, email);
     }

@@ -29,7 +29,7 @@ public class RegisterController {
     @PostMapping
     public ResponseUtil saveRegister(@RequestBody  RegisterDTO registerDTO){
         service.saveRegister(registerDTO);
-        return new ResponseUtil("200","Register Success!",null);
+        return new ResponseUtil("200","Registration Success...!",null);
     }
 
 //    @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -58,7 +58,7 @@ public class RegisterController {
 //    }
 
 
-    @PostMapping(path = "/uploadImg/{email}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/uploadImg/{email}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseUtil uploadImagesAndPath(@RequestPart("image") MultipartFile image, @PathVariable String email) {
         try {
 
@@ -80,16 +80,28 @@ public class RegisterController {
         }
     }
 
+    @PutMapping
+    public ResponseUtil updateInfo(@RequestBody RegisterDTO registerDTO){
+        service.updateInfo(registerDTO);
+        return new ResponseUtil("200","Update Success...!",null);
+    }
+
     @GetMapping
     public ResponseUtil getAllDetail(){
         ArrayList<RegisterDTO> allDetail = service.getAllDetail();
-        return new ResponseUtil("200","success",allDetail);
+        return new ResponseUtil("200","Success",allDetail);
     }
 
     @GetMapping(params = {"email","password"})
     public ResponseUtil findByEmailAndPassword(String email,String password){
         RegisterDTO details = service.findByEmailAndPassword(email, password);
-        return new ResponseUtil("200","success",details);
+        return new ResponseUtil("200","Success",details);
+    }
+
+    @DeleteMapping
+    public ResponseUtil deleteInfo(String email){
+        service.deleteInfo(email);
+        return new ResponseUtil("200","Account Remove Success...!",null);
     }
 
 }

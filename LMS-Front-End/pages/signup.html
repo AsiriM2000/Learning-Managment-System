@@ -9,7 +9,7 @@
        ============================================= -->
     <link href="../assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="../assets/css/index.css" rel="stylesheet">
-    <link href="../assets/img/book.png" rel="icon" type="image/png">
+    <link href="../assets/img/bachelors-degree.png" rel="icon" type="image/png">
 
     <!-- Meta tags
        ============================================= -->
@@ -31,13 +31,13 @@
         <!--------------------------- Left Box ----------------------------->
 
         <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box"
-             style="background: #103cbe;">
+             style="background: #F7DC6F;">
             <div class="featured-image mb-3">
                 <img class="img-fluid" src="../assets/img/lms.jpg" style="width: 450px;">
             </div>
-            <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Welcome
+            <p class="text-black fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">Welcome
                 To LMS</p>
-            <small class="text-white text-wrap text-center"
+            <small class="text-black text-wrap text-center"
                    style="width: 17rem;font-family: 'Courier New', Courier, monospace;">Please SignUp And Enroll
                 Courses</small>
         </div>
@@ -47,7 +47,7 @@
         <div class="col-md-6 right-box">
             <div class="row align-items-center">
                 <div class="header-text mb-4">
-                    <h2>Hello,User</h2>
+                    <h2>Hello,Student</h2>
                     <p>Happy to have you back.</p>
                 </div>
                 <div class="input-group mb-3">
@@ -183,7 +183,7 @@
 
         $.ajax({
             url: baseUrl + "student/uploadImg/" + email,
-            method: "POST",
+            method: "put",
             async: true,
             contentType: false,
             processData: false,

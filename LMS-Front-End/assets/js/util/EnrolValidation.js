@@ -1,58 +1,76 @@
 $("#name").focus();
 
 const NameRegEx =  /^[A-z ]{5,20}$/;
+const AddressRegEx =  /^[0-9/A-z. ,]{7,}$/;
+const ContactRegEx =  /^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$/;
 const EmailRegEx = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-const PasswordRegEx = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+const NICRegEx = /^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$/;
 
-let updateStudent = [];
-updateStudent.push({reg: NameRegEx, field: $('#name'),error:'Name Pattern is Wrong : A-z 5-20'});
-updateStudent.push({reg: EmailRegEx, field: $('#email'),error:'Email Pattern is Wrong : A-z @ 1-9 gmail.com'});
-updateStudent.push({reg: PasswordRegEx, field: $('#password'),error:'Password Pattern is Wrong : A-Z a-z symbols 1-9'});
+
+let enrollCourse = [];
+enrollCourse.push({reg: NameRegEx, field: $('#name'),error:'Name Pattern is Wrong : A-z 5-20'});
+enrollCourse.push({reg: AddressRegEx, field: $('#address'),error:'Address Pattern is Wrong : A-z 0-9 ,/'});
+enrollCourse.push({reg: ContactRegEx, field: $('#contact'),error:'Contact Pattern is Wrong : 0-9'});
+enrollCourse.push({reg: EmailRegEx, field: $('#email'),error:'Email Pattern is Wrong : A-z @ 1-9 gmail.com'});
+enrollCourse.push({reg: NICRegEx, field: $('#nic'),error:'Nic Pattern is Wrong : 0-9,A-z'});
+
 
 
 //disable tab key of all four text fields using grouping selector in CSS
-$("#name,#email,#password").on('keydown', function (event) {
+$("#name,#address,#contact,#email,#nic").on('keydown', function (event) {
     if (event.key == "Tab") {
         event.preventDefault();
     }
 });
 
 
-$("#name,#email,#password").on('keyup', function (event) {
+$("#name,#address,#contact,#email,#nic").on('keyup', function (event) {
     checkValidity();
 });
 
-$("#name,#email,#password").on('blur', function (event) {
+$("#name,#address,#contact,#email,#nic").on('blur', function (event) {
     checkValidity();
 });
 
 
 $("#name").on('keydown', function (event) {
     if (event.key == "Enter" && check(NameRegEx, $("#name"))) {
-        $("#email").focus();
+        $("#address").focus();
     } else {
         focusText($("#name"));
     }
 });
 
 
-$("#email").on('keydown', function (event) {
-    if (event.key == "Enter" && check(EmailRegEx, $("#email"))) {
-        focusText($("#password"));
+$("#address").on('keydown', function (event) {
+    if (event.key == "Enter" && check(AddressRegEx, $("#address"))) {
+        focusText($("#contact"));
     }
 });
 
 
-$("#password").on('keydown', function (event) {
-    if (event.key == "Enter" && check(PasswordRegEx, $("#price"))) {
-        focusText($("#updateInfo"));
+$("#contact").on('keydown', function (event) {
+    if (event.key == "Enter" && check(ContactRegEx, $("#contact"))) {
+        focusText($("#email"));
+    }
+});
+
+$("#email").on('keydown', function (event) {
+    if (event.key == "Enter" && check(EmailRegEx, $("#email"))) {
+        focusText($("#nic"));
+    }
+});
+
+$("#nic").on('keydown', function (event) {
+    if (event.key == "Enter" && check(NICRegEx, $("#nic"))) {
+        focusText($("#submitForm"))
     }
 });
 
 
 function checkValidity() {
     let errorCount=0;
-    for (let validation of updateStudent) {
+    for (let validation of enrollCourse) {
         if (check(validation.reg,validation.field)) {
             textSuccess(validation.field,"");
         } else {
@@ -97,8 +115,8 @@ function focusText(txtField) {
 
 function setButtonState(value){
     if (value>0){
-        $("#updateInfo").attr('disabled',true);
+        $("#submitForm").attr('disabled',true);
     }else{
-        $("#updateInfo").attr('disabled',false);
+        $("#submitForm").attr('disabled',false);
     }
 }

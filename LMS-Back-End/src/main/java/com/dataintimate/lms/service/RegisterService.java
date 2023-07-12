@@ -10,6 +10,8 @@ import java.util.ArrayList;
  **/
 public interface RegisterService {
     void saveRegister(RegisterDTO registerDTO);
+    void updateInfo(RegisterDTO registerDTO);
+    void deleteInfo(String email);
     void uploadRegisterImages(String image, String email);
     ArrayList<RegisterDTO> getAllDetail();
     RegisterDTO findByEmailAndPassword (String email,String password);
