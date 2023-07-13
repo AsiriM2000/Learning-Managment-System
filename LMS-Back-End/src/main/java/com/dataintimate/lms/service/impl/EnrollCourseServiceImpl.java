@@ -28,4 +28,31 @@ public class EnrollCourseServiceImpl implements EnrollCourseService {
     public void saveEnroll(EnrollCourseDTO courseDTO) {
         repo.save(modelMapper.map(courseDTO, EnrollCourse.class));
     }
+
+    @Override
+    public String generateEnrollId() {
+        long count = repo.count();
+        String id = "E00-001";
+
+        if (count != 0) {
+            String generateCustomerId = repo.generateEnrollId();
+            int tempId = Integer.parseInt(generateCustomerId.split("-")[1]);
+            tempId += 1;
+            if (tempId < 10) {
+                id = "E00-00" + tempId;
+            } else if (tempId < 100) {
+                id = "E00-0" + tempId;
+            } else if (tempId < 1000) {
+                id = "E00-" + tempId;
+            }
+        } else {
+            id = "E00-001";
+        }
+        return id;
+    }
+
+    @Override
+    public EnrollCourseDTO getEnroll(String id) {
+        return modelMapper.map(repo.getEnroll(id),EnrollCourseDTO.class);
+    }
 }

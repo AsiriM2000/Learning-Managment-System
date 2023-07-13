@@ -23,4 +23,16 @@ public class EnrollCourseController {
         service.saveEnroll(courseDTO);
         return new ResponseUtil("200","Enroll Course Success...!",null);
     }
+
+    @GetMapping
+    public ResponseUtil generateEnrollId(){
+        String id = service.generateEnrollId();
+        return new ResponseUtil("200","Success",id);
+    }
+
+    @GetMapping(params = {"id"})
+    public ResponseUtil getEnroll(String id){
+        EnrollCourseDTO enroll = service.getEnroll(id);
+        return new ResponseUtil("200","Success",enroll);
+    }
 }

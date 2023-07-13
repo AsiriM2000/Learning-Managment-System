@@ -8,4 +8,6 @@ import com.dataintimate.lms.dto.EnrollCourseDTO;
  **/
 public interface EnrollCourseService {
     void saveEnroll(EnrollCourseDTO courseDTO);
+    String generateEnrollId();
+    EnrollCourseDTO getEnroll(String id);
 }

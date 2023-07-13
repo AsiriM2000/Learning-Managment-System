@@ -14,6 +14,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class EnrollCourseDTO {
+    private String id;
     private String name;
     private String address;
     private String contact;

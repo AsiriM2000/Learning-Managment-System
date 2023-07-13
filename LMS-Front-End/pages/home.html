@@ -22,7 +22,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
 
     <style>
-        #content2 {
+        #content2,#content3 {
             display: none;
         }
         #marq{
@@ -31,6 +31,9 @@
         #accImage>img{
             border-radius: 50%;
             height: 200px;
+        }
+        #search{
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -46,11 +49,14 @@
             <li class="active" id="dashboard">
                 <a class="dashboard" href="#"><i class="material-icons">dashboard</i>dashboard </a>
             </li>
+            <li class="active" id="enrollCourse">
+                <a class="dashboard" href="#"><i class="material-icons">school</i>Check Enroll</a>
+            </li>
             <li class="active" id="account">
                 <a class="dashboard" href="#"><i class="material-icons">account_circle</i>Account </a>
             </li>
             <li class="active" id="logout">
-                <a class="dashboard" href="../pages/login.html" target="_self" style="color: rgb(237, 95, 30)"><i class="material-icons" style="color: rgb(237, 95, 30)">logout</i>logout </a>
+                <a class="dashboard" href="../index.html" target="_self" style="color: rgb(237, 95, 30)"><i class="material-icons" style="color: rgb(237, 95, 30)">logout</i>logout </a>
             </li>
         </ul>
     </div>
@@ -144,7 +150,6 @@
             </div>
         </div>
     </div>
-
     <div id="content2">
         <div class="main-content">
             <div class="row">
@@ -191,8 +196,52 @@
             </div>
         </div>
     </div>
-</div>
+    <div id="content3">
+        <div class="main-content" style="margin-left: 274px">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table">
+                        <div class="table-title">
+                            <div class="row">
+                                <div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
+                                    <h2 class="ml-lg-2">View Enroll Course</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <div class="container-fluid">
+                        <div class="row height d-flex justify-content-start align-items-start">
+                            <div class="col-md-3">
+                                <div class="search">
+                                    <i class="fa fa-search"></i>
+                                    <input type="text" class="form-control" placeholder="Eg: E00-00" id="searchEnrollId">
+                                </div>
+                                <button class="btn btn-primary" type="button" id="search">Search</button>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <table class="table  table-hover" style="margin-top: 10px">
+                        <thead class="bg-info text-white">
+                        <tr>
+                            <th style="width: 300px">Enroll Id</th>
+                            <th>Enroll Name</th>
+                            <th>Enroll Course</th>
+                            <th>Medium</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="tblEnroll">
+
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 <script src="../assets/js/bootstrap.min.js"></script>
 <script src="../assets/js/jquery-3.6.1.min.js"></script>
 <script src="../assets/js/util/validation.js"></script>
@@ -204,13 +253,21 @@
     $("#dashboard").click(function () {
         $("#content").css('display', 'block');
         $("#content2").css('display', 'none');
+        $("#content3").css('display', 'none');
     });
 
     $("#account").click(function () {
         $("#content").css('display', 'none');
         $("#content2").css('display', 'block');
+        $("#content3").css('display', 'none');
     });
-    
+
+    $("#enrollCourse").click(function () {
+        $("#content").css('display', 'none');
+        $("#content2").css('display', 'none');
+        $("#content3").css('display', 'block');
+    });
+
     function loadAccDetail() {
         var a = localStorage.getItem("myValue");
         let parse = JSON.parse(a);
@@ -278,6 +335,30 @@
                 alert(JSON.parse(error.responseText).message);
             }
         })
+    });
+
+    $("#search").click(function (){
+        $("#tblEnroll").empty();
+
+        let id =$("#searchEnrollId").val();
+        $.ajax({
+            url: baseUrl+"enroll?id="+id,
+            dataType: "json",
+            success: function (res){
+                let id = res.data.id;
+                let name = res.data.name;
+                let course = res.data.course;
+                let medium = res.data.medium;
+
+                let data = '<tr><td>'+id+'</td><td>'+name+'</td><td>'+course+'</td><td style="font-size: 16px">'+medium+'</td></tr>';
+                $("#tblEnroll").append(data);
+            },
+            error: function (error){
+                alert("Please Enter Valid Id");
+                console.log(JSON.parse(error.responseText).message);
+            }
+        })
+
     });
 </script>
 

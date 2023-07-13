@@ -57,6 +57,11 @@
                         <div class="coll-12">
                             <div class="row">
                                 <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="name">Enroll Id</label>
+                                        <input class="form-control" id="id" type="text" readonly>
+                                    </div>
+
                                         <div class="form-group">
                                             <label for="name">Full Name</label>
                                             <input class="form-control" id="name" type="text">
@@ -137,10 +142,25 @@
 <script>
     let baseUrl = "http://localhost:8081/lms/api/v1/";
 
+    generateEnrolId();
     loadAllGender();
     loadAllQualification();
     loadAllCourse();
     loadAllMedium();
+
+    function generateEnrolId(){
+        $.ajax({
+            url: baseUrl+"enroll",
+            dataType: "json",
+            success: function (res){
+                let id = res.data;
+                $("#id").val(id);
+            },
+            error: function (error){
+                console.log(JSON.parse(error.responseText).message);
+            }
+        })
+    }
 
     function loadAllGender() {
         $("#gender").empty();
@@ -186,6 +206,7 @@
 
     $("#submitForm").click(function (){
         let name = $("#name").val();
+        let id = $("#id").val();
         let address = $("#address").val();
         let contact = $("#contact").val();
         let email = $("#email").val();
@@ -197,6 +218,7 @@
         let medium = $("#medium").val();
 
         let enroll={
+            id:id,
             name:name,
             address:address,
             contact:contact,
@@ -218,6 +240,7 @@
             success: function (res){
                 alert(res.message);
                 clear();
+                generateEnrolId();
                 location.href='../home.html';
             },
             error: function (error){
