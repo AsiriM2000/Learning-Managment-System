@@ -247,7 +247,7 @@
 <script src="../assets/js/util/validation.js"></script>
 <script>
     let baseUrl = "http://localhost:8081/lms/api/v1/";
-
+    let img = '';
     loadAccDetail();
 
     $("#dashboard").click(function () {
@@ -279,6 +279,7 @@
                 url: baseUrl+"student?email="+email+"&password="+password,
                 dataType: "json",
                 success: function (res){
+                    img = res.data.image;
                     let name = res.data.name;
                     let email = res.data.email;
                     let password = res.data.password;
@@ -286,6 +287,7 @@
                     $("#name").val(name);
                     $("#email").val(email);
                     $("#password").val(password);
+
                 },
                 error: function (error){
                     console.log(JSON.parse(error.responseText).method);
@@ -298,11 +300,13 @@
         let name = $("#name").val();
         let email = $("#email").val();
         let password = $("#password").val();
+        let image = img;
 
         let student = {
             name:name,
             email:email,
-            password:password
+            password:password,
+            image:image
         }
 
         $.ajax({
