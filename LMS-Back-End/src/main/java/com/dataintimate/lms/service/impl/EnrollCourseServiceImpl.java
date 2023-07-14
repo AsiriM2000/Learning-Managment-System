@@ -26,6 +26,9 @@ public class EnrollCourseServiceImpl implements EnrollCourseService {
 
     @Override
     public void saveEnroll(EnrollCourseDTO courseDTO) {
+        if (repo.existsById(courseDTO.getId())){
+            throw new RuntimeException("Enroll "+courseDTO.getId()+" Already Exist...!");
+        }
         repo.save(modelMapper.map(courseDTO, EnrollCourse.class));
     }
 

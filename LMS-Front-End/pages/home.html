@@ -173,16 +173,24 @@
                                         <input type="email" class="form-control" id="email">
                                         <span class="control-error" id="lblemail"></span>
                                     </div>
+
+                                    <div class="form-group" style="margin-top: 10px">
+                                        <input aria-describedby="inputGroupFileAddon01" class="custom-file-input" id="myFile" name="myFile"
+                                               type="file">
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="name">Full Name</label>
                                         <input type="name" class="form-control" id="name">
                                         <span class="control-error" id="lblname"></span>
                                     </div>
+
                                     <div class="form-group">
                                         <label for="password">Password</label>
                                         <input type="password" class="form-control" id="password">
                                         <span class="control-error" id="lblpassword"></span>
                                     </div>
+
                                     <div class="form-group" style="margin-top: 10px">
                                         <button type="button" class="btn btn-warning" id="updateInfo">Update Info</button>
                                         <button type="button" class="btn btn-danger" id="deleteInfo">Delete Profile</button>
@@ -242,6 +250,8 @@
             </div>
         </div>
     </div>
+</div>
+
 <script src="../assets/js/bootstrap.min.js"></script>
 <script src="../assets/js/jquery-3.6.1.min.js"></script>
 <script src="../assets/js/util/validation.js"></script>
@@ -318,6 +328,7 @@
             success: function (res){
                 loadAccDetail();
                 alert(res.message);
+                updateImage(email);
             },
             error: function (error){
                 alert(JSON.parse(error.responseText).message);
@@ -364,8 +375,34 @@
         })
 
     });
-</script>
 
+    function updateImage(email) {
+
+        let imageViewFile = $("#myFile")[0].files[0];
+
+        let imageFileName = email + "-image-" + $("#myFile")[0].files[0].name;
+
+        var data = new FormData();
+        data.append("image", imageViewFile, imageFileName);
+
+        $.ajax({
+            url: baseUrl + "student/uploadImg/" + email,
+            method: "put",
+            async: true,
+            contentType: false,
+            processData: false,
+            data: data,
+            success: function (resp) {
+                console.log("Uploaded");
+                clear();
+                alert(resp.message)
+            },
+            error: function (error) {
+                alert(JSON.parse(error.responseText).message);
+            }
+        });
+    }
+</script>
 </body>
 </html>
 
